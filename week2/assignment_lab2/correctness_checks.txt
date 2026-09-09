@@ -1,0 +1,8 @@
+Saved assignment vectors with lengths 3000 and 5000 to data-raw/lab2_vectors.rds.
+PASS: The Task 3 result equals expected.
+ The Task 4 result equals expected.
+ as.matrix() of the Task 5 result equals expected.
+ The large results have dimensions 3000 by 5000.
+ Every dense output entry is either 0 or at least 0.5.
+ All distances exactly equal to 0.5 are preserved.
+ Task 5 has the same number of nonzero entries as Task 4.All Tasks 3-5 correctness checks passed.
