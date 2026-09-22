@@ -1,0 +1,111 @@
+---
+title: "ASP Problem Set 1"
+author: "Bort Wu"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question 5
+
+## (a) and (b)
+Suppose $x$ is the number of actual tea-first cups correctly classified by the participant. $50-x$ is the number of tea-first cups misclassified as tea-first. The experiment process can be conceptualized as selecting $x$ actual tea-first cups that are correctly identified from the 50 actual tea-first cups, and then selecting $50-x$ actual milk-first cups that are misclassified as tea-first from the 50 actual milk-first cups. Therefore, the probability of the participant classifying $k$ tea-first cups correctly is:
+$$P(X = x) = \frac{{50 \choose x} {50 \choose 50-x}}{{100 \choose 50}}$$
+This is essentially the PDF of a hypergeometric distribution. Recall that:
+In other words:
+$$X \sim \text{Hypergeometric}(N = 100, K = 50, n = 50)$$
+ where $N$ is the total number of cups, $K$ is the total number of actual tea-first cups, and $n$ is the total number of cups classified as tea-first.
+ 
+```{r}
+library(parallel)
+
+# Settings
+B <- 100000
+S_obs <- 67
+
+# Set up parallel cluster
+n_cores <- detectCores() # 8 cores in total
+cl <- makeCluster(n_cores)
+
+# Reproducible parallel RNG
+clusterSetRNGStream(cl, iseed = 4210)
+
+# Split simulations across cores
+B_each <- rep(B %/% n_cores, n_cores)
+
+# Monte Carlo simulation
+sim_list <- parLapply(
+  cl,
+  B_each,
+  function(nsim) {
+
+# Number of correctly identified tea-first cups X
+# As shown above, X follows a hypergeometric distribution
+    
+    X <- rhyper( 
+      nsim,
+      m = 50,
+      n = 50,
+      k = 50
+    )
+
+    # Total number correctly classified (both tea-first and milk-first)
+    2 * X
+  }
+)
+
+stopCluster(cl)
+
+S_sim <- unlist(sim_list)
+
+head(S_sim)
+
+```
+
+## (c) Plot the randomization distribution
+
+```{r}
+# Plot randomization distribution
+hist(
+  S_sim,
+  breaks = seq(-1, 101, by = 2),
+  probability = TRUE,
+  main = "Monte Carlo Randomization Distribution",
+  xlab = "Number of correctly classified cups, S"
+)
+
+abline(
+  v = S_obs,
+  lwd = 2,
+  lty = 2
+)
+
+legend(
+  "topright",
+  legend = paste("Observed S =", S_obs),
+  lty = 2,
+  lwd = 2
+)
+```
+
+## (d) Estimate the one-sided p-value
+```{r}
+# Monte Carlo p-value
+p_hat <- mean(S_sim >= S_obs)
+
+cat("The p-value from simluation is", p_hat,"\n")
+
+if (p_hat < 0.01) {
+  cat("We should reject the null hypothesis at 1% significance level.")
+} else{
+  cat("We cannot reject the null hypothesis at 1% significance level.")
+}
+
+```
+
+## (e) Assessment
+
+Since the p-value is even less than 0.01, I would reject the null hypothesis. There is very strong statistical evidence that the participant's classifications depend on whether tea or milk is poured first. 
