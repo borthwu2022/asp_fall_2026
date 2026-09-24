@@ -37,6 +37,7 @@ clusterSetRNGStream(cl, iseed = 4210)
 B_each <- rep(B %/% n_cores, n_cores)
 
 # Monte Carlo simulation
+sim_tea_test <- function(cl, B_each, n_tea, n_milk, n_tea_classified){
 sim_list <- parLapply(
   cl,
   B_each,
@@ -47,9 +48,9 @@ sim_list <- parLapply(
     
     X <- rhyper( 
       nsim,
-      m = 50,
-      n = 50,
-      k = 50
+      m = n_tea,# number of actual tea-first cups
+      n = n_milk, # number of actual milk-first cups
+      k = n_tea_classified # number of cups classified as tea-first
     )
 
     # Total number correctly classified (both tea-first and milk-first)
@@ -60,8 +61,9 @@ sim_list <- parLapply(
 stopCluster(cl)
 
 S_sim <- unlist(sim_list)
+}
 
-head(S_sim)
+
 
 ```
 
@@ -89,6 +91,7 @@ legend(
   lty = 2,
   lwd = 2
 )
+
 ```
 
 ## (d) Estimate the one-sided p-value
