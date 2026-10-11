@@ -1,0 +1,83 @@
+---
+title: "em_q3"
+author: "Bort Wu"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Load function code
+
+```{r}
+function_path <- file.path("R", "functions_for_em.R")
+
+source(function_path)
+
+```
+
+## Create data
+
+```{r}
+delta_mat <- matrix(c(0,0,0,
+                  1,0,0,
+                  0,1,0,
+                  0,0,1,
+                  1,1,1), nrow = 5, byrow = T)
+
+# Frequency for agreement patterns
+G <- c(172738,2030,114,68,50)
+
+```
+
+## Run EM
+
+```{r,eval=F}
+set.seed(123)
+
+fit <- em_algorithm(
+  delta_mat = delta_mat,
+  G = G,
+  n_starts = 50,
+  tol = 1e-10,
+  max_iter = 10000
+)
+
+save(fit, file = "results/em_fit.RData")
+```
+
+# Report parameter estimates
+
+```{r}
+load("results/em_fit.RData")
+
+data.frame(
+  delta = c(1,2,3),
+  p_est = fit$p,
+  m_est = fit$m,
+  u_est = fit$u
+)
+```
+
+# Plot observed-data log-likelihood convergence
+
+```{r}
+plot(
+  0:(length(fit$loglik) - 1),
+  fit$loglik,
+  type = "l",
+  col = "steelblue",
+  lwd = 2,
+  xlab = "Iteration",
+  ylab = "Observed-Data Log-Likelihood",
+  main = "EM Convergence: Best Random Start"
+)
+
+grid()
+
+```
