@@ -9,7 +9,7 @@ pset3/
 |-- src/
 |   |-- functions.cpp   # compile C++ functions
 |-- tests/
-|   |-- pset3_test.r    # test R and C++ functions and answer questions
+|   |-- pset3_tests.r   # test R and C++ functions and answer questions
 |-- README.md           # write-up for Q3, Q4 and Q5
 ```
 
