@@ -13,7 +13,7 @@ Rcpp::sourceCpp("src/functions.cpp", rebuild = TRUE)
 n_vec <- as.integer(c(4, 7, 10, 15))
 
 output_r <- sapply(n_vec, r_even) # T F T F
-output_cpp <- sapply(n_vec, evenCpp)
+output_cpp <- sapply(n_vec, evenCpp) # T F T F
 
 
 # 2. Step function
@@ -21,7 +21,7 @@ n_step_vec <- c(-3, 0, 3, 5, 10)
 
 output_step_r <- sapply(n_step_vec, stepR) # 0 1 1 2 2
 
-output_step_cpp <- sapply(n_step_vec, stepCpp)
+output_step_cpp <- sapply(n_step_vec, stepCpp)  # 0 1 1 2 2
 
 
 # 3. Approximate pi
@@ -29,8 +29,8 @@ output_step_cpp <- sapply(n_step_vec, stepCpp)
 set.seed(2016)
 N <- as.integer(c(100,1e3, 1e4, 1e5))
 
-output_pi_r <- sapply(N, piR)
-output_pi_cpp <- sapply(N, piCpp)
+output_pi_r <- sapply(N, piR) # 3.2000 3.0880 3.1372 3.1430
+output_pi_cpp <- sapply(N, piCpp) # 3.08000 3.12800 3.15280 3.14308
 
 df_accuracy <- data.frame(
   accuracy_r = round(abs(output_pi_r - pi),3),
