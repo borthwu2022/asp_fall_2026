@@ -60,7 +60,7 @@ $$
 T(n) = \Theta(\varphi^n)
 $$
 
-In other words, the computationt time for the Fibonacci function increases exponentially as $n$ increases. 
+In other words, the computation time for the Fibonacci function increases exponentially as $n$ increases. 
 
 As shown in the table below, while C++ can reduce the computational cost, it does not eliminate the computational problem that arises from the recursive nature of the function. 
 
