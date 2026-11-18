@@ -36,7 +36,7 @@ As shown above, as the sample size $N$ increases, the accuracy increases for bot
 | **Cpp**       | 15942.9 | 16364.5 | 17748.500 | 17177.85 | 18098.00 | 25182.9  | 100   |
 | **R_default** | 516.2   | 541.3   | 750.135   | 568.95   | 663.45   | 12728.2  | 100   |
 
-As shown above, the default function in $\texttt{R}$,  $\texttt{\%*\%}$, is the fastest. The custom R function is faster than the C++ function. 
+As shown above, the default function in $\texttt{R}$,  %*%, is the fastest. The custom R function is faster than the C++ function. 
 
 ## Question 5
 
